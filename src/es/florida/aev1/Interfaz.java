@@ -9,10 +9,12 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class Interfaz extends JFrame {
 
@@ -41,6 +43,7 @@ public class Interfaz extends JFrame {
 	private JButton btnGuardarCanvis;
 	private JTextField txtNouNom;
 	private JButton btnGuardarNom;
+	private JFrame mainFrame; 
 
 	/**
 	 * Launch the application.
@@ -72,12 +75,33 @@ public class Interfaz extends JFrame {
 		contentPane.setLayout(null);
 		
 		txtRuta = new JTextField();
+		txtRuta.setFont(new Font("Tahoma", Font.BOLD, 14));
 		txtRuta.setEnabled(false);
 		txtRuta.setBounds(315, 30, 779, 33);
 		contentPane.add(txtRuta);
 		txtRuta.setColumns(10);
 		
 		JButton btnSeleccionar = new JButton("Seleccionar Ruta");
+		btnSeleccionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 JFileChooser seleccion = new JFileChooser(".");
+				 btnSeleccionar.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						int returnVal = seleccion.showOpenDialog(null);
+						
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
+						}
+						
+					}
+				});
+			}
+		});
+		
+		
+		
 		btnSeleccionar.setBounds(1105, 30, 131, 33);
 		contentPane.add(btnSeleccionar);
 		
@@ -137,6 +161,10 @@ public class Interfaz extends JFrame {
 		contentPane.add(btnEliminar);
 		
 		btnEditar = new JButton("Editar document");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnEditar.setBounds(1223, 158, 130, 33);
 		contentPane.add(btnEditar);
 		
