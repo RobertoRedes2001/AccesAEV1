@@ -46,9 +46,8 @@ public class Interfaz extends JFrame {
 	private JTextField txtNouNom;
 	private JButton btnGuardarNom;
 	private JFrame mainFrame; 
-	DefaultListModel <String> listaElements = new DefaultListModel<>();
+	DefaultListModel <String> listaElements;
 	private JList <String> list;
-	private JScrollPane scrollPane_1;
 
 	/**
 	 * Launch the application.
@@ -100,13 +99,16 @@ public class Interfaz extends JFrame {
 						
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
+							
 							File elements = new  File (seleccion.getSelectedFile().getAbsolutePath());
 							String[] listaDirectorio = elements.list(); 
+							listaElements = new DefaultListModel<>();
+							for (int i = 0; i < listaDirectorio.length; i++) {
+								listaElements.addElement(listaDirectorio[i]);
+							}
+							list = new JList<String>(listaElements);
+							add(list);
 
-
-							
-							
-							
 						}
 						
 					}
@@ -213,12 +215,9 @@ public class Interfaz extends JFrame {
 		btnGuardarNom.setBounds(637, 547, 113, 33);
 		contentPane.add(btnGuardarNom);
 		
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(72, 420, 123, -217);
-		contentPane.add(scrollPane_1);
-		
 		list = new JList();
-		scrollPane_1.setViewportView(list);
-		list.setBorder(new LineBorder(new Color(0, 0, 0), 11));
+		list.setBounds(57, 158, 162, 376);
+		contentPane.add(list);
+		list.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 	}
 }
