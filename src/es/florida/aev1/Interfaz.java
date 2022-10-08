@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -13,16 +14,18 @@ import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JList;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class Interfaz extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtRuta;
-	private JTextField txtInfoDir;
-	private JTextField txtInfoFile;
-	private JTextField txtFile;
 	private JLabel lblInfoFile;
 	private JLabel lblFile;
 	private JButton btnCrear;
@@ -30,20 +33,22 @@ public class Interfaz extends JFrame {
 	private JButton btnCopiar;
 	private JButton btnEliminar;
 	private JButton btnEditar;
-	private JButton btnBuscarIReemplaçar;
+	private JButton btnBuscarIReemplazar;
 	private JTextField txtBuscar;
 	private JLabel lblBuscar;
 	private JLabel lblReemplaçar;
-	private JTextField txtReemp;
+	private JTextField txtReemplazar;
 	private JButton btnBuscar;
-	private JButton btnReemplaçar;
+	private JButton btnReemplazar;
 	private JScrollPane scrollPane;
-	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
 	private JButton btnGuardarCanvis;
 	private JTextField txtNouNom;
 	private JButton btnGuardarNom;
 	private JFrame mainFrame; 
+	DefaultListModel <String> listaElements = new DefaultListModel<>();
+	private JList <String> list;
+	private JScrollPane scrollPane_1;
 
 	/**
 	 * Launch the application.
@@ -60,14 +65,13 @@ public class Interfaz extends JFrame {
 			}
 		});
 	}
-
 	/**
 	 * Create the frame.
 	 */
 	public Interfaz() {
 		setTitle("RoBoDoc");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1595, 754);
+		setBounds(100, 100, 1391, 737);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -75,13 +79,15 @@ public class Interfaz extends JFrame {
 		contentPane.setLayout(null);
 		
 		txtRuta = new JTextField();
+		txtRuta.setBounds(340, 71, 477, 33);
 		txtRuta.setFont(new Font("Tahoma", Font.BOLD, 14));
 		txtRuta.setEnabled(false);
-		txtRuta.setBounds(315, 30, 779, 33);
 		contentPane.add(txtRuta);
 		txtRuta.setColumns(10);
 		
+		
 		JButton btnSeleccionar = new JButton("Seleccionar Ruta");
+		btnSeleccionar.setBounds(839, 73, 131, 33);
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 JFileChooser seleccion = new JFileChooser(".");
@@ -89,137 +95,130 @@ public class Interfaz extends JFrame {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						int returnVal = seleccion.showOpenDialog(null);
+						seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+						int returnVal = seleccion.showSaveDialog(null);
 						
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
+							File elements = new  File (seleccion.getSelectedFile().getAbsolutePath());
+							String[] listaDirectorio = elements.list(); 
+
+
+							
+							
+							
 						}
 						
 					}
 				});
 			}
 		});
-		
-		
-		
-		btnSeleccionar.setBounds(1105, 30, 131, 33);
 		contentPane.add(btnSeleccionar);
 		
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(90, 158, 236, 350);
-		contentPane.add(scrollPane_1);
-		
-		txtInfoDir = new JTextField();
-		scrollPane_1.setViewportView(txtInfoDir);
-		txtInfoDir.setEnabled(false);
-		txtInfoDir.setColumns(10);
-		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(428, 158, 236, 350);
+		scrollPane.setBounds(339, 158, 236, 350);
 		contentPane.add(scrollPane);
 		
-		txtInfoFile = new JTextField();
-		scrollPane.setViewportView(txtInfoFile);
-		txtInfoFile.setEnabled(false);
-		txtInfoFile.setColumns(10);
-		
 		scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(760, 158, 389, 350);
+		scrollPane_2.setBounds(637, 158, 389, 350);
 		contentPane.add(scrollPane_2);
 		
-		txtFile = new JTextField();
-		txtFile.setEnabled(false);
-		scrollPane_2.setViewportView(txtFile);
-		txtFile.setColumns(10);
-		
 		JLabel lblInfoDir = new JLabel("Elements del directori");
-		lblInfoDir.setBounds(90, 132, 123, 22);
+		lblInfoDir.setBounds(60, 132, 123, 22);
 		contentPane.add(lblInfoDir);
 		
 		lblInfoFile = new JLabel("Informaci\u00F3 del fitxer");
-		lblInfoFile.setBounds(428, 132, 123, 22);
+		lblInfoFile.setBounds(339, 132, 123, 22);
 		contentPane.add(lblInfoFile);
 		
 		lblFile = new JLabel("Contingut del fitxer");
-		lblFile.setBounds(760, 132, 123, 22);
+		lblFile.setBounds(637, 132, 123, 22);
 		contentPane.add(lblFile);
 		
 		btnCrear = new JButton("Nou document");
-		btnCrear.setBounds(376, 643, 113, 33);
+		btnCrear.setBounds(262, 591, 113, 33);
 		contentPane.add(btnCrear);
 		
 		btnRenombrar = new JButton("Renombrar");
-		btnRenombrar.setBounds(528, 643, 113, 33);
+		btnRenombrar.setBounds(489, 591, 113, 33);
 		contentPane.add(btnRenombrar);
 		
 		btnCopiar = new JButton("Copiar");
-		btnCopiar.setBounds(693, 643, 113, 33);
+		btnCopiar.setBounds(262, 635, 113, 33);
 		contentPane.add(btnCopiar);
 		
 		btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(838, 643, 113, 33);
+		btnEliminar.setBounds(489, 635, 113, 33);
 		contentPane.add(btnEliminar);
 		
 		btnEditar = new JButton("Editar document");
+		btnEditar.setBounds(1036, 158, 130, 33);
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnEditar.setBounds(1223, 158, 130, 33);
 		contentPane.add(btnEditar);
 		
-		btnBuscarIReemplaçar = new JButton("Buscar i reempla\u00E7ar");
-		btnBuscarIReemplaçar.addActionListener(new ActionListener() {
+		btnBuscarIReemplazar = new JButton("Buscar i reempla\u00E7ar");
+		btnBuscarIReemplazar.setBounds(1171, 158, 179, 33);
+		btnBuscarIReemplazar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnBuscarIReemplaçar.setBounds(1363, 158, 179, 33);
-		contentPane.add(btnBuscarIReemplaçar);
+		contentPane.add(btnBuscarIReemplazar);
 		
 		txtBuscar = new JTextField();
+		txtBuscar.setBounds(1036, 245, 179, 20);
 		txtBuscar.setEnabled(false);
-		txtBuscar.setBounds(1223, 298, 179, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
 		
 		lblBuscar = new JLabel("Buscar");
+		lblBuscar.setBounds(1105, 220, 61, 14);
 		lblBuscar.setEnabled(false);
-		lblBuscar.setBounds(1289, 219, 61, 14);
 		contentPane.add(lblBuscar);
 		
 		lblReemplaçar = new JLabel("Reempla\u00E7ar");
+		lblReemplaçar.setBounds(1094, 276, 61, 14);
 		lblReemplaçar.setEnabled(false);
-		lblReemplaçar.setBounds(1278, 273, 61, 14);
 		contentPane.add(lblReemplaçar);
 		
-		txtReemp = new JTextField();
-		txtReemp.setEnabled(false);
-		txtReemp.setColumns(10);
-		txtReemp.setBounds(1223, 244, 179, 20);
-		contentPane.add(txtReemp);
+		txtReemplazar = new JTextField();
+		txtReemplazar.setBounds(1036, 298, 179, 20);
+		txtReemplazar.setEnabled(false);
+		txtReemplazar.setColumns(10);
+		contentPane.add(txtReemplazar);
 		
 		btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(1240, 244, 89, 23);
 		btnBuscar.setEnabled(false);
-		btnBuscar.setBounds(1453, 244, 89, 23);
 		contentPane.add(btnBuscar);
 		
-		btnReemplaçar = new JButton("Reempla\u00E7ar");
-		btnReemplaçar.setEnabled(false);
-		btnReemplaçar.setBounds(1453, 297, 89, 23);
-		contentPane.add(btnReemplaçar);
+		btnReemplazar = new JButton("Reempla\u00E7ar");
+		btnReemplazar.setBounds(1240, 297, 89, 23);
+		btnReemplazar.setEnabled(false);
+		contentPane.add(btnReemplazar);
 		
 		btnGuardarCanvis = new JButton("Guardar canvis");
+		btnGuardarCanvis.setBounds(1065, 341, 123, 33);
 		btnGuardarCanvis.setEnabled(false);
-		btnGuardarCanvis.setBounds(1289, 347, 123, 33);
 		contentPane.add(btnGuardarCanvis);
 		
 		txtNouNom = new JTextField();
-		txtNouNom.setBounds(487, 566, 341, 33);
+		txtNouNom.setBounds(262, 547, 341, 33);
 		contentPane.add(txtNouNom);
 		txtNouNom.setColumns(10);
 		
 		btnGuardarNom = new JButton("Renombrar");
-		btnGuardarNom.setBounds(838, 566, 113, 33);
+		btnGuardarNom.setBounds(637, 547, 113, 33);
 		contentPane.add(btnGuardarNom);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(72, 420, 123, -217);
+		contentPane.add(scrollPane_1);
+		
+		list = new JList();
+		scrollPane_1.setViewportView(list);
+		list.setBorder(new LineBorder(new Color(0, 0, 0), 11));
 	}
 }
