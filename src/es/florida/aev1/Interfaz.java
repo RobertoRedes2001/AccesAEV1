@@ -107,7 +107,11 @@ public class Interfaz extends JFrame {
 								listaElements.addElement(listaDirectorio[i]);
 							}
 							list = new JList<String>(listaElements);
-							add(list);
+							
+							for (int i = 0; i < listaDirectorio.length; i++) {
+								list.getName();
+							}
+							
 
 						}
 						
@@ -216,7 +220,7 @@ public class Interfaz extends JFrame {
 		contentPane.add(btnGuardarNom);
 		
 		list = new JList();
-		list.setBounds(57, 158, 162, 376);
+		list.setBounds(57, 158, 179, 376);
 		contentPane.add(list);
 		list.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 	}
