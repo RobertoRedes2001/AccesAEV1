@@ -15,12 +15,15 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.TextArea;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
 import java.awt.BorderLayout;
@@ -33,9 +36,7 @@ public class Interfaz extends JFrame {
 	private JTextField txtRuta;
 	private JLabel lblInfoFile;
 	private JLabel lblFile;
-	private JButton btnCrear;
 	private JButton btnRenombrar;
-	private JButton btnCopiar;
 	private JButton btnEliminar;
 	private JButton btnEditar;
 	private JButton btnBuscarIReemplazar;
@@ -163,15 +164,64 @@ public class Interfaz extends JFrame {
 		lblFile.setBounds(637, 132, 123, 22);
 		contentPane.add(lblFile);
 		
-		btnCrear = new JButton("Nou document");
-		btnCrear.setBounds(262, 591, 113, 33);
+		JButton btnCrear = new JButton("Nou document");
+		btnCrear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser seleccion = new JFileChooser();
+				seleccion.setDialogTitle("Crea un document nou");
+				btnCrear.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+						int returnVal = seleccion.showSaveDialog(null);
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
+							try {
+								archivo.createNewFile();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+						
+					}
+				});
+			}
+		});
+		btnCrear.setBounds(262, 591, 131, 33);
 		contentPane.add(btnCrear);
 		
 		btnRenombrar = new JButton("Renombrar");
 		btnRenombrar.setBounds(489, 591, 113, 33);
 		contentPane.add(btnRenombrar);
 		
-		btnCopiar = new JButton("Copiar");
+		JButton btnCopiar = new JButton("Copiar");
+		btnCopiar.addActionListener(new ActionListener() {				
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser seleccion = new JFileChooser();
+					seleccion.setDialogTitle("Copiar Document");
+					btnCopiar.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
+							int returnVal = seleccion.showSaveDialog(null);
+							if (returnVal == JFileChooser.APPROVE_OPTION) {
+								File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
+								try {
+									File copia = new File(archivo.getAbsolutePath(),archivo.getName()+"_copia");
+									copia.createNewFile();	
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
+							
+						}
+					});
+				}
+			});
 		btnCopiar.setBounds(262, 635, 113, 33);
 		contentPane.add(btnCopiar);
 		
