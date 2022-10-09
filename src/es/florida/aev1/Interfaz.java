@@ -41,7 +41,7 @@ public class Interfaz extends JFrame {
 	private JButton btnBuscarIReemplazar;
 	private JTextField txtBuscar;
 	private JLabel lblBuscar;
-	private JLabel lblReemplaçar;
+	private JLabel lblReemplazar;
 	private JTextField txtReemplazar;
 	private JButton btnBuscar;
 	private JButton btnReemplazar;
@@ -52,8 +52,12 @@ public class Interfaz extends JFrame {
 	private JButton btnGuardarNom;
 	JFrame mainFrame; 
 	DefaultListModel <String> listaDefault;
-	private JTextField txtInfoDir;
-	private JScrollPane scrollPane_1;
+	private JScrollPane spInfoDir;
+	private JTextArea txtInfoDir;
+	private JTextArea txtInfoFile;
+	private JTextArea txtContenidoFile;
+	private JScrollPane spContenidoFile;
+	private JScrollPane spInfoFile;
 
 
 	/**
@@ -107,13 +111,14 @@ public class Interfaz extends JFrame {
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							
 							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
-							String ruta = txtRuta.getText();
-							File elements = new  File (ruta);
-							String[] listaElemDir = elements.list();
-							
-							String text = txtInfoDir.getText();
-							TextArea textArea = new TextArea();
-							textArea.append(text+"\n");
+                            
+                            File elements = new  File (seleccion.getSelectedFile().getAbsolutePath());
+                            String[] listaDirectorio = elements.list(); 
+                            String dirTxt="";
+                            for(int i=0;i<listaDirectorio.length;i++) {
+                                dirTxt+="\n"+listaDirectorio[i]+"\n";
+                            }
+                            txtInfoDir.setText(dirTxt);
 							
 							
 							
@@ -128,9 +133,23 @@ public class Interfaz extends JFrame {
 		scrollPane.setBounds(339, 158, 236, 350);
 		contentPane.add(scrollPane);
 		
+		txtInfoFile = new JTextArea();
+		txtInfoFile.setEditable(false);
+		scrollPane.setViewportView(txtInfoFile);
+		
+		spInfoFile = new JScrollPane();
+		scrollPane.setRowHeaderView(spInfoFile);
+		
 		scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(637, 158, 389, 350);
 		contentPane.add(scrollPane_2);
+		
+		txtContenidoFile = new JTextArea();
+		txtContenidoFile.setEditable(false);
+		scrollPane_2.setViewportView(txtContenidoFile);
+		
+		spContenidoFile = new JScrollPane();
+		scrollPane_2.setRowHeaderView(spContenidoFile);
 		
 		JLabel lblInfoDir = new JLabel("Elements del directori");
 		lblInfoDir.setBounds(60, 132, 123, 22);
@@ -187,10 +206,10 @@ public class Interfaz extends JFrame {
 		lblBuscar.setEnabled(false);
 		contentPane.add(lblBuscar);
 		
-		lblReemplaçar = new JLabel("Reempla\u00E7ar");
-		lblReemplaçar.setBounds(1094, 276, 61, 14);
-		lblReemplaçar.setEnabled(false);
-		contentPane.add(lblReemplaçar);
+		lblReemplazar = new JLabel("Reempla\u00E7ar");
+		lblReemplazar.setBounds(1094, 276, 61, 14);
+		lblReemplazar.setEnabled(false);
+		contentPane.add(lblReemplazar);
 		
 		txtReemplazar = new JTextField();
 		txtReemplazar.setBounds(1036, 298, 179, 20);
@@ -222,12 +241,12 @@ public class Interfaz extends JFrame {
 		btnGuardarNom.setBounds(637, 547, 113, 33);
 		contentPane.add(btnGuardarNom);
 		
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(60, 177, 131, 302);
-		contentPane.add(scrollPane_1);
+		spInfoDir = new JScrollPane();
+		spInfoDir.setBounds(60, 158, 220, 350);
+		contentPane.add(spInfoDir);
 		
-		txtInfoDir = new JTextField();
-		scrollPane_1.setViewportView(txtInfoDir);
-		txtInfoDir.setColumns(10);
+		txtInfoDir = new JTextArea();
+		txtInfoDir.setEditable(false);
+		spInfoDir.setViewportView(txtInfoDir);
 	}
 }
