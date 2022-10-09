@@ -18,9 +18,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.TextArea;
+
 import javax.swing.JList;
 import javax.swing.border.LineBorder;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.JTextArea;
 
 public class Interfaz extends JFrame {
 
@@ -45,9 +50,11 @@ public class Interfaz extends JFrame {
 	private JButton btnGuardarCanvis;
 	private JTextField txtNouNom;
 	private JButton btnGuardarNom;
-	private JFrame mainFrame; 
-	DefaultListModel <String> listaElements;
-	private JList <String> list;
+	JFrame mainFrame; 
+	DefaultListModel <String> listaDefault;
+	private JTextField txtInfoDir;
+	private JScrollPane scrollPane_1;
+
 
 	/**
 	 * Launch the application.
@@ -89,32 +96,28 @@ public class Interfaz extends JFrame {
 		btnSeleccionar.setBounds(839, 73, 131, 33);
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 JFileChooser seleccion = new JFileChooser(".");
+				 JFileChooser seleccion = new JFileChooser();
 				 btnSeleccionar.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-						int returnVal = seleccion.showSaveDialog(null);
+						int returnVal = seleccion.showOpenDialog(null);
 						
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							
 							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
+							String ruta = txtRuta.getText();
+							File elements = new  File (ruta);
+							String[] listaElemDir = elements.list();
 							
-							File elements = new  File (seleccion.getSelectedFile().getAbsolutePath());
-							String[] listaDirectorio = elements.list(); 
-							listaElements = new DefaultListModel<>();
-							for (int i = 0; i < listaDirectorio.length; i++) {
-								listaElements.addElement(listaDirectorio[i]);
-							}
-							list = new JList<String>(listaElements);
+							String text = txtInfoDir.getText();
+							TextArea textArea = new TextArea();
+							textArea.append(text+"\n");
 							
-							for (int i = 0; i < listaDirectorio.length; i++) {
-								list.getName();
-							}
 							
-
+							
 						}
-						
 					}
 				});
 			}
@@ -219,9 +222,12 @@ public class Interfaz extends JFrame {
 		btnGuardarNom.setBounds(637, 547, 113, 33);
 		contentPane.add(btnGuardarNom);
 		
-		list = new JList();
-		list.setBounds(57, 158, 179, 376);
-		contentPane.add(list);
-		list.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(60, 177, 131, 302);
+		contentPane.add(scrollPane_1);
+		
+		txtInfoDir = new JTextField();
+		scrollPane_1.setViewportView(txtInfoDir);
+		txtInfoDir.setColumns(10);
 	}
 }
