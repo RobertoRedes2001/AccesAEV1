@@ -104,29 +104,23 @@ public class Interfaz extends JFrame {
 		btnSeleccionar.setBounds(839, 73, 131, 33);
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				JFileChooser seleccion = new JFileChooser();
-				btnSeleccionar.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-						int returnVal = seleccion.showOpenDialog(seleccion);
-
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
-
-							File elements = new File(seleccion.getSelectedFile().getAbsolutePath());
-							String[] listaDirectorio = elements.list();
-							String dirTxt = "";
-							for (int i = 0; i < listaDirectorio.length; i++) {
-								dirTxt += listaDirectorio[i] + "\n";
-							}
-							txtInfoDir.setText(dirTxt);
-
-						}
+				seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = seleccion.showOpenDialog(seleccion);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+	
+					txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
+	
+					File elements = new File(seleccion.getSelectedFile().getAbsolutePath());
+					String[] listaDirectorio = elements.list();
+					String dirTxt = "";
+					for (int i = 0; i < listaDirectorio.length; i++) {
+						dirTxt += listaDirectorio[i] + "\n";
 					}
-				});
+					txtInfoDir.setText(dirTxt);
+	
+				}
 			}
 		});
 		contentPane.add(btnSeleccionar);
@@ -166,28 +160,22 @@ public class Interfaz extends JFrame {
 		contentPane.add(lblFile);
 
 		JButton btnCrear = new JButton("Nou document");
-		btnCrear.addActionListener(new ActionListener() {
+		btnCrear.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setDialogTitle("Crea un document nou");
-				btnCrear.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-						int returnVal = seleccion.showSaveDialog(null);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-							File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-							try {
-								archivo.createNewFile();
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
-
+				seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = seleccion.showSaveDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
+					try {
+						archivo.createNewFile();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-				});
+				}
+
 			}
 		});
 		btnCrear.setBounds(262, 591, 131, 33);
@@ -198,43 +186,36 @@ public class Interfaz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setDialogTitle("Selecciona un document");
-				btnArchivo.addActionListener(new ActionListener() {
+				seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int returnVal = seleccion.showOpenDialog(null);
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
-						int returnVal = seleccion.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
+					txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
 
-							txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
-
-							File arx = new File(seleccion.getSelectedFile().getAbsolutePath());
-							FileReader fr;
-							try {
-								fr = new FileReader(arx);
-								BufferedReader leerFile = new BufferedReader(fr);
-								String line = leerFile.readLine();
-								while (line != null) {
-									txtContenidoFile.append(line + "\n");
-									line = leerFile.readLine();
-								}
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
-							String fileTxt = "Name: " + arx.getName() + "\n" + "Path: " + arx.getPath() + "\n"
-									+ "Absolute Path: " + arx.getAbsolutePath() + "\n" + "Can Write: " + arx.canWrite()
-									+ "\n" + "Can Read: " + arx.canRead() + "\n" + "Length: " + arx.length();
-
-							txtInfoFile.setText(fileTxt);
-
-							;
+					File arx = new File(seleccion.getSelectedFile().getAbsolutePath());
+					FileReader fr;
+					try {
+						fr = new FileReader(arx);
+						BufferedReader leerFile = new BufferedReader(fr);
+						String line = leerFile.readLine();
+						while (line != null) {
+							txtContenidoFile.append(line + "\n");
+							line = leerFile.readLine();
 						}
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-				});
 
+					String fileTxt = "Nom: " + arx.getName() + "\n" + "Ruta: " + arx.getPath() + "\n"
+                            + "Ruta absoluta: " + arx.getAbsolutePath() + "\n" + "Escritura: " + arx.canWrite()
+                            + "\n" + "Lectura: " + arx.canRead() + "\n" + "Tamany: " + arx.length();
+					
+					txtInfoFile.setText(fileTxt);
+
+					;
+				}
 			}
 		});
 		btnArchivo.setBounds(471, 591, 131, 33);
@@ -245,37 +226,31 @@ public class Interfaz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setDialogTitle("Copiar Document");
-				btnCopiar.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
-						int returnVal = seleccion.showSaveDialog(null);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-							File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-							try {
-								FileReader fr = new FileReader(archivo);
-								FileWriter fw = new FileWriter("arxiuNou_copia.txt");
-								BufferedReader br = new BufferedReader(fr);
-								BufferedWriter bw = new BufferedWriter(fw);
-								String linea = br.readLine();
-								while (linea != null) {
-									bw.write(linea);
-									bw.newLine();
-									linea = br.readLine();
-								}
-								bw.close();
-								br.close();
-								br.close();
-								fr.close();
-
-							} catch (IOException e2) {
-								e2.printStackTrace();
-							}
+				seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int returnVal = seleccion.showSaveDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
+					try {
+						FileReader fr = new FileReader(archivo);
+						FileWriter fw = new FileWriter(archivo.getAbsolutePath().split(".txt")[0]+"_copia.txt");
+						BufferedReader br = new BufferedReader(fr);
+						BufferedWriter bw = new BufferedWriter(fw);
+						String linea = br.readLine();
+						while (linea != null) {
+							bw.write(linea);
+							bw.newLine();
+							linea = br.readLine();
 						}
+						bw.close();
+						br.close();
+						br.close();
+						fr.close();
 
+					} catch (IOException e2) {
+						e2.printStackTrace();
 					}
-				});
+				}
+
 			}
 		});
 		btnCopiar.setBounds(262, 635, 113, 33);
@@ -286,26 +261,20 @@ public class Interfaz extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setDialogTitle("Borrar Document");
-				btnEliminar.addActionListener(new ActionListener() {
+				seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int returnVal = seleccion.showSaveDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "Segur que vols eliminar el fitxer?",
+							"Confirmacio per a eliminar", JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE, null);
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
-						int returnVal = seleccion.showSaveDialog(null);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-							int confirmacion = JOptionPane.showConfirmDialog(null, "Segur que vols eliminar el fitxer?",
-									"Confirmacio per a eliminar", JOptionPane.YES_NO_OPTION,
-									JOptionPane.WARNING_MESSAGE, null);
-
-							if (confirmacion == 0) {
-								File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-								archivo.delete();
-							}
-
-						}
-
+					if (confirmacion == 0) {
+						File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
+						archivo.delete();
 					}
-				});
+
+				}
+
 			}
 		});
 		btnEliminar.setBounds(489, 635, 113, 33);
@@ -372,23 +341,15 @@ public class Interfaz extends JFrame {
 		JButton btnGuardarNom = new JButton("Renombrar");
 		btnGuardarNom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser seleccion = new JFileChooser();
-				seleccion.setDialogTitle("Renombrar document");
-				btnGuardarNom.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
-						int returnVal = seleccion.showSaveDialog(null);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-								File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-								File nouName = new File(txtNouNom.getText() + ".txt");
-								archivo.renameTo(nouName);
-							}
-						}
-
-					}
-				);
+			JFileChooser seleccion = new JFileChooser();
+			seleccion.setDialogTitle("Renombrar document");
+			seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int returnVal = seleccion.showSaveDialog(null);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
+					File nouName = new File(archivo.getAbsolutePath().split(archivo.getName())[0]+txtNouNom.getText() + ".txt");
+					archivo.renameTo(nouName);
+				}
 			}
 		});
 		btnGuardarNom.setBounds(637, 547, 113, 33);
