@@ -178,6 +178,8 @@ public class Interfaz extends JFrame {
 
 			}
 		});
+		
+		
 		btnCrear.setBounds(262, 591, 131, 33);
 		contentPane.add(btnCrear);
 
@@ -346,8 +348,10 @@ public class Interfaz extends JFrame {
 			seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int returnVal = seleccion.showSaveDialog(null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
+					String mensajeJOption = JOptionPane.showInputDialog("Indica el nou nom del fitxer");
+					
 					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-					File nouName = new File(archivo.getAbsolutePath().split(archivo.getName())[0]+txtNouNom.getText() + ".txt");
+					File nouName = new File(archivo.getAbsolutePath().split(archivo.getName())[0]+mensajeJOption + ".txt");
 					archivo.renameTo(nouName);
 				}
 			}
