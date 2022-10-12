@@ -1,7 +1,7 @@
 package es.florida.aev1;
 
 import java.awt.EventQueue;
-import java.util.regex.Pattern;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -18,11 +18,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.TextArea;
@@ -30,12 +30,15 @@ import java.awt.TextArea;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
+import javax.swing.text.Highlighter;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
-import javax.swing.text.Highlighter;
+import javax.swing.text.BadLocationException;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JTextArea;
+
 public class Interfaz extends JFrame {
 
 	private JPanel contentPane;
@@ -160,6 +163,7 @@ public class Interfaz extends JFrame {
 		contentPane.add(lblFile);
 
 		JButton btnCrear = new JButton("Nou document");
+		btnCrear.setBounds(179, 590, 131, 33);
 		btnCrear.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
@@ -178,23 +182,23 @@ public class Interfaz extends JFrame {
 
 			}
 		});
-		
-		
-		btnCrear.setBounds(262, 591, 131, 33);
 		contentPane.add(btnCrear);
 
 		JButton btnArchivo = new JButton("Abrir Document");
+		btnArchivo.setBounds(464, 590, 131, 33);
 		btnArchivo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
+				txtContenidoFile.setText("");
+				txtInfoFile.setText("");
 				seleccion.setDialogTitle("Selecciona un document");
 				seleccion.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				int returnVal = seleccion.showOpenDialog(null);
-
+				
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 					txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
-
+					
 					File arx = new File(seleccion.getSelectedFile().getAbsolutePath());
 					FileReader fr;
 					try {
@@ -220,10 +224,10 @@ public class Interfaz extends JFrame {
 				}
 			}
 		});
-		btnArchivo.setBounds(471, 591, 131, 33);
 		contentPane.add(btnArchivo);
 
 		JButton btnCopiar = new JButton("Copiar");
+		btnCopiar.setBounds(328, 590, 113, 33);
 		btnCopiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
@@ -255,10 +259,10 @@ public class Interfaz extends JFrame {
 
 			}
 		});
-		btnCopiar.setBounds(262, 635, 113, 33);
 		contentPane.add(btnCopiar);
 
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(753, 590, 113, 33);
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser seleccion = new JFileChooser();
@@ -279,15 +283,18 @@ public class Interfaz extends JFrame {
 
 			}
 		});
-		btnEliminar.setBounds(489, 635, 113, 33);
 		contentPane.add(btnEliminar);
-		
-		
+
 		btnEditar = new JButton("Editar document");
-		btnEditar.setBounds(1036, 158, 130, 33);
+		btnEditar.setBounds(1058, 155, 130, 33);
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				txtBuscar.setEnabled(true);
+				txtContenidoFile.setEditable(true);
+				txtReemplazar.setEnabled(true);
+				btnReemplazar.setEnabled(true);
+				btnBuscar.setEnabled(true);
+				btnGuardarCanvis.setEnabled(true);
 			}
 		});
 		contentPane.add(btnEditar);
@@ -299,50 +306,70 @@ public class Interfaz extends JFrame {
 		txtBuscar.setColumns(10);
 
 		lblBuscar = new JLabel("Buscar");
-		lblBuscar.setBounds(1105, 220, 40, 14);
-		lblBuscar.setEnabled(false);
+		lblBuscar.setBounds(1105, 220, 61, 14);
 		contentPane.add(lblBuscar);
 
 		lblReemplazar = new JLabel("Reempla\u00E7ar");
-		lblReemplazar.setBounds(1094, 276, 56, 14);
-		lblReemplazar.setEnabled(false);
+		lblReemplazar.setBounds(1094, 276, 61, 14);
 		contentPane.add(lblReemplazar);
 
 		txtReemplazar = new JTextField();
-		txtReemplazar.setEditable(false);
 		txtReemplazar.setBounds(1036, 298, 179, 20);
 		txtReemplazar.setEnabled(false);
 		txtReemplazar.setColumns(10);
 		contentPane.add(txtReemplazar);
-		
-		
+
 		btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
+		btnBuscar.setEnabled(false);
+		  
+        btnBuscar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+        
+
+         }
+        });
+        btnBuscar.setBounds(1240, 244, 89, 23);
+        contentPane.add(btnBuscar);
+
+		btnReemplazar = new JButton("Reempla\u00E7ar");
+		btnReemplazar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-								
-				
+			
 				String texto = txtContenidoFile.getText();
-				String textoABuscar = txtBuscar.getText();
-				Highlighter subrayado = txtBuscar.getHighlighter();
-				
-				
+				String busca = txtBuscar.getText();
+				String cambia = txtReemplazar.getText();
+				String nuevoText = texto.replace(busca, cambia);
+				txtContenidoFile.setText(nuevoText);
 				
 			}
 		});
-		btnBuscar.setBounds(1240, 244, 89, 23);
-		contentPane.add(btnBuscar);
-
-		btnReemplazar = new JButton("Reempla\u00E7ar");
 		btnReemplazar.setBounds(1240, 297, 89, 23);
 		btnReemplazar.setEnabled(false);
 		contentPane.add(btnReemplazar);
 
 		btnGuardarCanvis = new JButton("Guardar canvis");
+		btnGuardarCanvis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String ruta = txtRuta.getText();
+				File saveFile = new File(ruta);
+				try {
+				FileWriter fw = new FileWriter(saveFile);
+				fw.write(txtContenidoFile.getText());
+				fw.close();
+				
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		btnGuardarCanvis.setBounds(1065, 341, 123, 33);
 		btnGuardarCanvis.setEnabled(false);
 		contentPane.add(btnGuardarCanvis);
 
 		JButton btnGuardarNom = new JButton("Renombrar");
+		btnGuardarNom.setBounds(616, 590, 113, 33);
 		btnGuardarNom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			JFileChooser seleccion = new JFileChooser();
@@ -358,7 +385,6 @@ public class Interfaz extends JFrame {
 				}
 			}
 		});
-		btnGuardarNom.setBounds(372, 541, 113, 33);
 		contentPane.add(btnGuardarNom);
 
 		spInfoDir = new JScrollPane();
