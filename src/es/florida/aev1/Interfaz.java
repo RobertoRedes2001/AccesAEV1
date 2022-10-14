@@ -119,26 +119,30 @@ public class Interfaz extends JFrame {
 		txtRuta.setEnabled(false);
 		contentPane.add(txtRuta);
 		txtRuta.setColumns(10);
-
+		
+		
+		//Botón abrir carpeta. 
 		JButton btnSeleccionar = new JButton("Abrir Carpeta");
 		btnSeleccionar.setBounds(680, 28, 131, 35);
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				//File Chooser que abre el menú contextual para abrir carpetas y ficheros. 
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int returnVal = seleccion.showOpenDialog(seleccion);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-
+					//Cuando se selecciona un elemento y se pulsa en aceptar toma la ruta del archivo del cuadro de texto superior. 
 					txtRuta.setText(seleccion.getSelectedFile().getAbsolutePath());
-
+					//Crea un File del archivo con la ruta del elemento seleccionado en el JFIleChooser. 
 					File elements = new File(seleccion.getSelectedFile().getAbsolutePath());
-					String[] listaDirectorio = elements.list();
+					String[] listaDirectorio = elements.list(); //LIsta de strings que tendrá los elementos de la carpeta. 
 					String dirTxt = "";
+					//Introducimos los nombres de los directorios en el array de Strings. 
 					for (int i = 0; i < listaDirectorio.length; i++) {
 						dirTxt += listaDirectorio[i] + "\n";
 					}
 					lblInfoFile.setText("Elements del directori");
+					//Imprimimos el string con los elementos en la cadena de texto. 
 					txtInfoFile.setText(dirTxt);
 
 				}
@@ -181,6 +185,10 @@ public class Interfaz extends JFrame {
 		btnCrear.setBounds(181, 393, 107, 33);
 		btnCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				/**
+				 * Crear nuevo documento. 
+				 */
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setDialogTitle("Crea un document nou");
 				seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -188,9 +196,9 @@ public class Interfaz extends JFrame {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
 					try {
+						//Creamos el nuevo elemento "Clonando" el anterior. El nombre lo introducimos en el JFile Chooser
 						archivo.createNewFile();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -203,7 +211,7 @@ public class Interfaz extends JFrame {
 		btnArchivo.setBounds(52, 29, 131, 33);
 		btnArchivo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ocultarBotones();
+				ocultarBotones(); //Funcione
 				JFileChooser seleccion = new JFileChooser();
 				txtContenidoFile.setText("");
 				txtInfoFile.setText("");
