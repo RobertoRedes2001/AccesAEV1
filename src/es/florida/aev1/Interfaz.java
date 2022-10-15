@@ -69,21 +69,28 @@ public class Interfaz extends JFrame {
 	private JScrollPane spInfoFile;
 	private JLabel lblContador;
 	
+	
+	/**
+	 * 
+	 */
 	public void ocultarBotones() {
 		
-		txtBuscar.setEnabled(false);
 		txtContenidoFile.setEditable(false);
+		txtContenidoFile.setText("");
 		txtReemplazar.setEnabled(false);
 		btnReemplazar.setEnabled(false);
 		btnBuscar.setEnabled(false);
+		txtBuscar.setEnabled(false);
 		btnGuardarCanvis.setEnabled(false);
 		lblContador.setText("");
 		btnEditar.setEnabled(true);
+		txtInfoFile.setText("");
 		
 	}
 	
 	/**
-	 * Launch the application.
+	 * Programa principal. Llança la aplicación. 
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -91,6 +98,7 @@ public class Interfaz extends JFrame {
 				try {
 					Interfaz frame = new Interfaz();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null); //Centrar el Jframe
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -114,18 +122,21 @@ public class Interfaz extends JFrame {
 		contentPane.setLayout(null);
 
 		txtRuta = new JTextField();
-		txtRuta.setBounds(193, 27, 477, 33);
+		txtRuta.setBounds(193, 28, 477, 35);
 		txtRuta.setFont(new Font("Tahoma", Font.BOLD, 14));
 		txtRuta.setEnabled(false);
 		contentPane.add(txtRuta);
 		txtRuta.setColumns(10);
 		
 		
-		//Botón abrir carpeta. 
-		JButton btnSeleccionar = new JButton("Abrir Carpeta");
+		/**
+		 * Botón obrir carpeta. 
+		 */
+		JButton btnSeleccionar = new JButton("Obrir Carpeta");
 		btnSeleccionar.setBounds(680, 28, 131, 35);
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ocultarBotones();
 				//File Chooser que abre el menú contextual para abrir carpetas y ficheros. 
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -148,6 +159,7 @@ public class Interfaz extends JFrame {
 				}
 			}
 		});
+		
 
 		contentPane.add(btnSeleccionar);
 
@@ -180,15 +192,17 @@ public class Interfaz extends JFrame {
 		lblFile = new JLabel("Contingut del fitxer");
 		lblFile.setBounds(423, 88, 123, 22);
 		contentPane.add(lblFile);
+		
+		/**
+		 * Crear nuevo documento. 
+		 */
 
 		JButton btnCrear = new JButton("Nou");
 		btnCrear.setBounds(181, 393, 107, 33);
 		btnCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				/**
-				 * Crear nuevo documento. 
-				 */
+				
 				JFileChooser seleccion = new JFileChooser();
 				seleccion.setDialogTitle("Crea un document nou");
 				seleccion.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -206,8 +220,14 @@ public class Interfaz extends JFrame {
 			}
 		});
 		contentPane.add(btnCrear);
+		
+		/**
+		 * Obrir document. Rep el document amb la ruta del cuadre de text superior. Llig el contingut, el guarda en altre document per 
+		 * a mostrar-ho i arreplega les propietats del document per a mostrar-ho també. 
+		 * 
+		 */
 
-		JButton btnArchivo = new JButton("Abrir Document");
+		JButton btnArchivo = new JButton("Obrir Document");
 		btnArchivo.setBounds(52, 29, 131, 33);
 		btnArchivo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -250,6 +270,11 @@ public class Interfaz extends JFrame {
 			}
 		});
 		contentPane.add(btnArchivo);
+		
+		/**
+		 * Copiar. Rep el document del cuadre de ruta superior,llig el contingut amb FR,BR,FW,BW y el volca en un nou document que s'anomena igual pero amb
+		 * _copia.txt al final. 
+		 */
 
 		JButton btnCopiar = new JButton("Copiar");
 		btnCopiar.setBounds(52, 393, 110, 33);
@@ -263,7 +288,7 @@ public class Interfaz extends JFrame {
 					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
 					try {
 						FileReader fr = new FileReader(archivo);
-						FileWriter fw = new FileWriter(archivo.getAbsolutePath().split(".txt")[0] + "_copia.txt");
+						FileWriter fw = new FileWriter(archivo.getAbsolutePath().split(".txt")[0] + "_copia.txt"); //Partix el nom del document en 2: la rutafins al .txt, el sustrau i afegeix _copia.txt
 						BufferedReader br = new BufferedReader(fr);
 						BufferedWriter bw = new BufferedWriter(fw);
 						String linea = br.readLine();
@@ -272,6 +297,7 @@ public class Interfaz extends JFrame {
 							bw.newLine();
 							linea = br.readLine();
 						}
+						//tancar les clases de lectura i escritura. 
 						bw.close();
 						br.close();
 						br.close();
@@ -286,6 +312,9 @@ public class Interfaz extends JFrame {
 		});
 		contentPane.add(btnCopiar);
 
+		/**
+		 * Eliminar. Amb un Jchooser que solament mostre arxius seleccionem arxiu i mostra un miossatge per confirmar. 
+		 */
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.setBounds(178, 349, 110, 33);
 		btnEliminar.addActionListener(new ActionListener() {
@@ -299,8 +328,8 @@ public class Interfaz extends JFrame {
 							"Confirmacio per a eliminar", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
 
 					if (confirmacion == 0) {
-						File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-						archivo.delete();
+						File archivo = new File(seleccion.getSelectedFile().getAbsolutePath()); //creacio de un File per a arreplegar el File seleccionat en "seleccion".
+						archivo.delete(); //borra el arxiu. 
 					}
 
 				}
@@ -308,7 +337,11 @@ public class Interfaz extends JFrame {
 			}
 		});
 		contentPane.add(btnEliminar);
-
+		
+		/**
+		 * Boto que s'habilita solament cuan seleccionem un arxiu (txtContenidoFile is distint a vuit); Aques boto habilita buscar, editar, reemplaçar i 
+		 * guarda canvis. 
+		 */
 		btnEditar = new JButton("Editar document");
 		btnEditar.setEnabled(false);
 		btnEditar.setBounds(422, 349, 130, 33);
@@ -331,11 +364,11 @@ public class Interfaz extends JFrame {
 		txtBuscar.setColumns(10);
 
 		lblBuscar = new JLabel("Buscar");
-		lblBuscar.setBounds(491, 393, 61, 14);
+		lblBuscar.setBounds(494, 393, 41, 14);
 		contentPane.add(lblBuscar);
 
 		lblReemplazar = new JLabel("Reempla\u00E7ar");
-		lblReemplazar.setBounds(484, 447, 61, 14);
+		lblReemplazar.setBounds(484, 447, 79, 14);
 		contentPane.add(lblReemplazar);
 
 		txtReemplazar = new JTextField();
@@ -343,6 +376,14 @@ public class Interfaz extends JFrame {
 		txtReemplazar.setEnabled(false);
 		txtReemplazar.setColumns(10);
 		contentPane.add(txtReemplazar);
+		
+		
+		/**
+		 * Buscar coincidencies. 
+		 * Carguem el contingut del text a buscar. "txtBuscar.getText()" a pattern, de la classe Pattern. Aquesta clase que registra patrons per 
+		 * su posterior comparativa. comparem amb matcher el contingut del patró pattern amb el contingut del arxiu (txtCOntenidoFile.getText()) 
+		 * si pattern i matcher coinxideixen subrayem cada coincidencia i sumem 1 al contador de coincidencies. 
+		 */
 
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.setEnabled(false);
@@ -350,23 +391,24 @@ public class Interfaz extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Highlighter highlighter = txtContenidoFile.getHighlighter();
-				DefaultHighlighter.DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
+				Highlighter highlighter = txtContenidoFile.getHighlighter(); //Subrayador
+				DefaultHighlighter.DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN); //Color de subrayador. 
 
-				highlighter.removeAllHighlights();
+				highlighter.removeAllHighlights(); //Borrem tots els subrayats per seguretat. 
 
+				//l'Opcio solament s'activa si el contingut de txtBuscar no está viut. 
 				if (txtBuscar.getText().isEmpty()) {
 					JOptionPane.showConfirmDialog(null, "El cuadre de busqueda no pot estar vuit","Avis"
 							,JOptionPane.DEFAULT_OPTION,
 							JOptionPane.INFORMATION_MESSAGE, null);
 				}else {
-					Pattern pattern = Pattern.compile(Pattern.quote(txtBuscar.getText()));
-					Matcher matcher = pattern.matcher(txtContenidoFile.getText());
-					int cont = 0;
-					while (matcher.find()) {
+					Pattern pattern = Pattern.compile(Pattern.quote(txtBuscar.getText())); //patro de busqueda. 
+					Matcher matcher = pattern.matcher(txtContenidoFile.getText()); // Contingut a comparar amb el patro. 
+					int cont = 0; //contador de incidencies. 
+					while (matcher.find()) { //si n'hi ha coincidencia. 
 						try {
-							highlighter.addHighlight(matcher.start(), matcher.end(), painter);
-							cont++;
+							highlighter.addHighlight(matcher.start(), matcher.end(), painter); //subrayem el match des de l'inici fins al final i afegim el color. 
+							cont++; //sumem 1 al contador. 
 						} catch (BadLocationException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -380,19 +422,23 @@ public class Interfaz extends JFrame {
 		});
 		btnBuscar.setBounds(629, 418, 131, 23);
 		contentPane.add(btnBuscar);
-
+		
+		
+		/**
+		 * Opcion que reempaça el contingut del cuadre de buscar en el document per el de reemplaçar.  
+		 */
 		btnReemplazar = new JButton("Reempla\u00E7ar");
 		btnReemplazar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (txtReemplazar.getText().isEmpty()) {
-					JOptionPane.showConfirmDialog(null, "El cuadre de reemplazar no pot estar vuit","Avis"
+					JOptionPane.showConfirmDialog(null, "El cuadre de reemplaçar no pot estar vuit","Avis"
 							,JOptionPane.DEFAULT_OPTION,
 							JOptionPane.INFORMATION_MESSAGE, null);
 				}else {
-					String texto = txtContenidoFile.getText();
-					String busca = txtBuscar.getText();
-					String cambia = txtReemplazar.getText();
-					String nuevoText = texto.replace(busca, cambia);
+					String texto = txtContenidoFile.getText(); //capturem el contingut del fitxer. 
+					String busqueda = txtBuscar.getText();//capturem la busqueda. 
+					String cambia = txtReemplazar.getText();//capturem el text a reemplaçar  
+					String nuevoText = texto.replace(busqueda, cambia); //Reemplaçem el text buscat amb el que volem reemplaçar. 
 					txtContenidoFile.setText(nuevoText);
 				}
 			}
@@ -400,28 +446,69 @@ public class Interfaz extends JFrame {
 		btnReemplazar.setBounds(629, 472, 131, 23);
 		btnReemplazar.setEnabled(false);
 		contentPane.add(btnReemplazar);
-
+		
+		
+		/*
+		 * Guardar cambis fets al document. PRegunta si vol reesriure o generar un nou document. 
+		 */
 		btnGuardarCanvis = new JButton("Guardar canvis");
 		btnGuardarCanvis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String ruta = txtRuta.getText();
-				File saveFile = new File(ruta);
-				try {
-					FileWriter fw = new FileWriter(saveFile);
-					fw.write(txtContenidoFile.getText());
-					fw.close();
+				
+				Object[] opciones = {"Sobreescriure","Nou"}; //array de objectes per poder personalitzer el missatge de avis. 
+				Object defaultOpcion = opciones[0];
+				
+				int confirmacion = JOptionPane.showOptionDialog(null, "Vols sobreescriure el arxiu o crear uno nou?",
+						"Confirmacio per a guardar canvis", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,opciones,defaultOpcion);
 
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (confirmacion == 0) { //Si la opcio es la primera (Sobreescriure) Agafa la ruta, crea un File i li pasa el nou text al document que ja existeix. 
+					String ruta = txtRuta.getText();
+					File saveFile = new File(ruta);
+					try {
+						FileWriter fw = new FileWriter(saveFile);
+						fw.write(txtContenidoFile.getText());
+						fw.close();
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}else { //si seleccionem l'altra opcion del menu missatge. 
+					String mensajeJOption = JOptionPane.showInputDialog("Indica el nou nom del fitxer(sense extensio)");  
+
+					File archivo = new File(txtRuta.getText());
+					File nouName = new File(txtRuta.getText().split(archivo.getName())[0] + mensajeJOption + ".txt"); //Crea un nou arxiu en la mateixa ruta que el original amb el 
+					try {																							//nou indicat  + .txt
+						FileReader fr = new FileReader(archivo); //Llegim el document
+						FileWriter fw = new FileWriter(nouName); //Carguem el text al nou document. 
+						BufferedReader br = new BufferedReader(fr);
+						BufferedWriter bw = new BufferedWriter(fw);
+						String linea = br.readLine();
+						while (linea != null) {
+							bw.write(linea);
+							bw.newLine();
+							linea = br.readLine();
+						}
+						bw.close();
+						br.close();
+						br.close();
+						fr.close();
+
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
+					
 				}
-
 			}
 		});
 		btnGuardarCanvis.setBounds(637, 349, 123, 33);
 		btnGuardarCanvis.setEnabled(false);
 		contentPane.add(btnGuardarCanvis);
-
+		
+		/**
+		 * Renombrar. Abans de terminar pregunta el nom del nou document. 
+		 */
 		JButton btnGuardarNom = new JButton("Renombrar");
 		btnGuardarNom.setBounds(52, 349, 110, 33);
 		btnGuardarNom.addActionListener(new ActionListener() {
@@ -434,8 +521,7 @@ public class Interfaz extends JFrame {
 					String mensajeJOption = JOptionPane.showInputDialog("Indica el nou nom del fitxer");
 
 					File archivo = new File(seleccion.getSelectedFile().getAbsolutePath());
-					File nouName = new File(
-							archivo.getAbsolutePath().split(archivo.getName())[0] + mensajeJOption + ".txt");
+					File nouName = new File(archivo.getAbsolutePath().split(archivo.getName())[0] + mensajeJOption + ".txt"); //El mateix que en guardar. 
 					archivo.renameTo(nouName);
 				}
 			}
@@ -445,7 +531,7 @@ public class Interfaz extends JFrame {
 		lblContador = new JLabel("");
 		lblContador.setHorizontalAlignment(SwingConstants.LEFT);
 		lblContador.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblContador.setBounds(556, 92, 255, 14);
+		lblContador.setBounds(603, 88, 208, 22);
 		contentPane.add(lblContador);
 		
 	}
