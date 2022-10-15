@@ -71,7 +71,7 @@ public class Interfaz extends JFrame {
 	
 	
 	/**
-	 * 
+	 * Neteja els camps de text i deshabilita els botons de buscar i reemplaçar cada vegada que es vol obrir un fitxer. 
 	 */
 	public void ocultarBotones() {
 		
